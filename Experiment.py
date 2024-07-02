@@ -69,6 +69,26 @@ random.choice(display_sizes)
 
 
 # Instruktionen (als dict?) definieren
+welcome_stim = visula.TextStim(win)
+welcome_stim.setText("Willkommen zu unserem Experiment \n\n Bitte geben Sie Ihre Daten in folgende Anzeigetafel ein.") #Je nach dem wann die Anzeigetafel angezeigt wird?
+welcome_stim.draw()
+win.flip()
+core.wait(5) #Zeit evtl. anpassen
+
+instruct_stim = visual.TextStim(win) 
+instruct_stim.setText("In diesem Experiment geht es darum ein Affengesicht zwischen mehreren Menschengesichtern zu finden. \n\n "\
+"Auf diese Weise wollen wir untersuchen, wie gut zwischen Menschen- und Affengesichtern unterschieden werden kann. \n\n "\
+"Das Experimenten besteht aus x Blöcken mit y trials. \n\n" \
+"Ihre Aufgabe besteht darin, (1) in jedem Display das Affengesicht zu suchen und (2) zu entscheiden, ob das Display ein Affengesicht enthält. \n\n "\
+"Drücken Sie bitte die Taste (A) für  Affengesicht und (L) für Kein Affengesicht. \n\n" \ 
+"Legen Sie nun bitte die Finger auf die entsprechenden Tasten. \n\n" \ 
+"Zunächst starten wir mit einem kurzen Training. \n\n " \
+"Nach erfolgreiche Trainig startet das eigentliche Experiment. \n\n" \
+"Drücken Sie die Leertaste, um das Experiment zu starten \n\n" \
+"Viel Erfolg!")   
+instruct_stim.draw()
+win.flip() 
+event.waitKeys(maxWait=30.0, keyList=["space"])  #Anzeigedauer noch anpassen.
 
 
 
