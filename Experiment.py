@@ -69,7 +69,7 @@ random.choice(display_sizes)
 
 
 # Instruktionen (als dict?) definieren
-welcome_stim = visula.TextStim(win)
+welcome_stim = visual.TextStim(win)
 welcome_stim.setText("Willkommen zu unserem Experiment \n\n Bitte geben Sie Ihre Daten in folgende Anzeigetafel ein.") #Je nach dem wann die Anzeigetafel angezeigt wird?
 welcome_stim.draw()
 win.flip()
