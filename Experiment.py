@@ -85,7 +85,6 @@ instruct_stim.setText("In diesem Experiment geht es darum ein Affengesicht zwisc
 "Drücken Sie die Leertaste für [weiter].")
 instruct_stim.draw()
 win.flip()
-core.wait(5)
 event.waitKeys(maxWait=30.0, keyList=["space"])
 
 instruct_stim_2 = visual.TextStim(win) 
