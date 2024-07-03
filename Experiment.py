@@ -57,8 +57,8 @@ print(age, gender, vp_id)
 # stuff specific to our experiment
 win = visual.Window(
     color='grey',
-    size=[1366, 768],                      # Display anpassen
-    fullscr = False)                        # kann bei Mac nun geschlossen an
+    size=[1366, 768],                      # Display anpassen, mac = 2560, 1440
+    fullscr = False)                        # kann bei Mac nun geschlossen an, mac = true
 
 
 # Anzahl der Stimuli randomisieren
