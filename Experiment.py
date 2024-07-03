@@ -99,3 +99,7 @@ event.waitKeys(maxWait=30.0, keyList=["space"])#Anzeigedauer noch anpassen.
 
 
 # Experiment-Funktion
+
+
+# end experiment
+core.quit()
