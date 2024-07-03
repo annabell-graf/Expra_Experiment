@@ -19,7 +19,6 @@ human_img_list = glob.glob(os.path.join(img_dir, "human*"))
 # ...
 
 # keyboard input
-
 trial_keys = ['a', 'l']
 continue_key = 'space'
 
@@ -70,9 +69,7 @@ win = visual.Window(
 
 
 # Anzahl der Stimuli randomisieren
-
 display_sizes = [9,18,36]
-
 random.choice(display_sizes)
 
 
