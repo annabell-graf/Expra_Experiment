@@ -78,19 +78,18 @@ display_sizes = [9,18,36]
 random.choice(display_sizes)
 
 
-# Instruktionen (als dict?) definieren
+# Instruktionen definieren
 welcome_stim = visual.TextStim(win)
-welcome_stim.setText("Willkommen zu unserem Experiment \n\n Bitte geben Sie Ihre Daten in folgende Anzeigetafel ein.") #Je nach dem wann die Anzeigetafel angezeigt wird?
+welcome_stim.setText(
+"Herzlich willkommen! \n\n" "In diesem Experiment geht es darum ein Menschengesicht zwischen mehreren Affengesichtern zu finden.") #Je nach dem wann die Anzeigetafel angezeigt wird?
 welcome_stim.draw()
 win.flip()
-core.wait(5) #Zeit evtl. anpassen
+event.waitKeys(maxWait=30.0, keyList=["space"])
 
 instruct_stim = visual.TextStim(win) 
-instruct_stim.setText("In diesem Experiment geht es darum ein Menschengesicht zwischen mehreren Affengesichtern zu finden. \n\n "\
-"Auf diese Weise wollen wir untersuchen, wie gut zwischen Menschen- und Affengesichtern unterschieden werden kann. \n\n "\
+instruct_stim.setText(
 "Das Experimenten besteht aus x Blöcken mit y trials. \n\n" \
-"Ihre Aufgabe besteht darin, (1) in jedem Display das Menschengesicht zu suchen und (2) zu entscheiden, ob das Display ein Menschengesicht enthält. \n\n "\
-"Drücken Sie bitte die Taste (A) für  Menschengesicht und (L) für kein Menschengesicht. \n\n" \
+"Drücken Sie bitte die Taste (A) wenn ein Menschengesicht da ist und (L) wenn kein Menschengesicht da ist. \n\n" \
 "Legen Sie nun bitte die Finger auf die entsprechenden Tasten. \n\n"\
 "Drücken Sie die Leertaste für [weiter].")
 instruct_stim.draw()
@@ -99,12 +98,12 @@ event.waitKeys(maxWait=30.0, keyList=["space"])
 
 instruct_stim_2 = visual.TextStim(win) 
 instruct_stim_2.setText("Zunächst starten wir mit einem kurzen Training. \n\n " \
-"Nach erfolgreiche Trainig startet das eigentliche Experiment. \n\n" \
+"Nach erfolgreichem Trainig startet das eigentliche Experiment. \n\n" \
 "Drücken Sie die Leertaste, um das Experiment zu starten \n\n" \
 "Viel Erfolg!")   
 instruct_stim_2.draw()
 win.flip() 
-event.waitKeys(maxWait=30.0, keyList=["space"])#Anzeigedauer noch anpassen.
+event.waitKeys(maxWait=30.0, keyList=["space"])                                    
 
 
 
