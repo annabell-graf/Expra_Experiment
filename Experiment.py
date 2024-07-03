@@ -1,5 +1,4 @@
 # packages laden
-
 from   psychopy import visual, gui, core, event
 import random
 import os
@@ -8,7 +7,6 @@ import time
 import pandas as pd
 
 # Bilder importieren
-
 img_dir = os.getcwd() + "images"                                                                # Arbeitsverzeichnis definieren!
 
 stim_list      = glob.glob(os.path.join(img_dir, "*.jpeg"))
