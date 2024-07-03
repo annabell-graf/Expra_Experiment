@@ -16,8 +16,24 @@ primate_img_list   = glob.glob(os.path.join(img_dir, "primate*"))
 human_img_list = glob.glob(os.path.join(img_dir, "human*"))
 
 # Outputordner definieren
+output_path = os.getcwd() + f'vp{vp_id}'
+if not os.path.exists(output_path):
+    os.makedirs(output_path)
 
-# ...
+# dict für behav_Daten
+behav_data = pd.DataFrame({'vp_id' : [],
+                           'age' : [],
+                           'gender' : [],
+                           'block' : [],
+                           'trial' : [],
+                           'correct_key' : [],
+                           'reaction_time' : [],
+                           'target : [],             # wir wollen erfassen, ob Zielreiz anwesend ist -> ja/nein
+                          })
+
+file_path = os.path.join(output_path, f' vp{vp_id}_find-human.csv')
+
+
 
 # Abbruchkriterium für Training
 
