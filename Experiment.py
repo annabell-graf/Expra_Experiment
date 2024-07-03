@@ -81,14 +81,18 @@ instruct_stim.setText("In diesem Experiment geht es darum ein Affengesicht zwisc
 "Das Experimenten besteht aus x Blöcken mit y trials. \n\n" \
 "Ihre Aufgabe besteht darin, (1) in jedem Display das Affengesicht zu suchen und (2) zu entscheiden, ob das Display ein Affengesicht enthält. \n\n "\
 "Drücken Sie bitte die Taste (A) für  Affengesicht und (L) für Kein Affengesicht. \n\n" \ 
-"Legen Sie nun bitte die Finger auf die entsprechenden Tasten. \n\n" \ 
-"Zunächst starten wir mit einem kurzen Training. \n\n " \
+"Legen Sie nun bitte die Finger auf die entsprechenden Tasten. \n\n")
+win.flip()
+core.wait(5)
+
+instruct_stim_2 = visual.TextStim(win) 
+instruct_stim_2.setText("Zunächst starten wir mit einem kurzen Training. \n\n " \
 "Nach erfolgreiche Trainig startet das eigentliche Experiment. \n\n" \
 "Drücken Sie die Leertaste, um das Experiment zu starten \n\n" \
 "Viel Erfolg!")   
-instruct_stim.draw()
+instruct_stim_2.draw()
 win.flip() 
-event.waitKeys(maxWait=30.0, keyList=["space"])  #Anzeigedauer noch anpassen.
+event.waitKeys(maxWait=30.0, keyList=["space"])#Anzeigedauer noch anpassen.
 
 
 
