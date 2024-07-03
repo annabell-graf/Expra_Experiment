@@ -21,7 +21,17 @@ human_img_list = glob.glob(os.path.join(img_dir, "human*"))
 
 # Abbruchkriterium für Training
 
-# ...
+# for-loop mit displays noch erstellen
+true_answers = 0
+while true_answers < 5:
+    if response == ["a"] and "human" in display: #displays müssen noch definiert werden
+            true_answers += 1
+    elif response == ["l"] and "no human" in display:  
+            true_answers += 1
+    elif response == ["a"] and "no human" in display:
+            true_answers += 0
+    elif response == ["l"] and "human" in display:  
+            true_answers += 0 
 
 # Anzahl von Trials und Blöcken
 
