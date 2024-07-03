@@ -13,39 +13,6 @@ stim_list      = glob.glob(os.path.join(img_dir, "*.jpeg"))
 primate_img_list   = glob.glob(os.path.join(img_dir, "primate*"))
 human_img_list = glob.glob(os.path.join(img_dir, "human*"))
 
-# Outputordner definieren
-output_path = os.getcwd() + f'vp{vp_id}'
-if not os.path.exists(output_path):
-    os.makedirs(output_path)
-
-# dict für behav_Daten
-behav_data = pd.DataFrame({'vp_id' : [],
-                           'age' : [],
-                           'gender' : [],
-                           'block' : [],
-                           'trial' : [],
-                           'correct_key' : [],
-                           'reaction_time' : [],
-                           'target : [],             # wir wollen erfassen, ob Zielreiz anwesend ist -> ja/nein
-                          })
-
-file_path = os.path.join(output_path, f' vp{vp_id}_find-human.csv')
-
-
-
-# Abbruchkriterium für Training
-
-# for-loop mit displays noch erstellen
-true_answers = 0
-while true_answers < 5:
-    if response == ["a"] and "human" in display: #displays müssen noch definiert werden
-            true_answers += 1
-    elif response == ["l"] and "no human" in display:  
-            true_answers += 1
-    elif response == ["a"] and "no human" in display:
-            true_answers += 0
-    elif response == ["l"] and "human" in display:  
-            true_answers += 0 
 
 # Anzahl von Trials und Blöcken
 
@@ -58,7 +25,6 @@ continue_key = 'space'
 
 
 # Daten aufnehmen
-
 vp_info = {
     "age"   : [],
     "gender": ["---","m", "w", "d"],            # vorauswählbare Antworten
@@ -76,6 +42,24 @@ gender = vp_info["gender"]
 vp_id = vp_info["vp_id"]
 print(age, gender, vp_id)
 
+
+# Outputordner definieren
+output_path = os.getcwd() + f'vp{vp_id}'
+if not os.path.exists(output_path):
+    os.makedirs(output_path)
+
+# dict für behav_Daten
+behav_data = pd.DataFrame({'vp_id' : [],
+                           'age' : [],
+                           'gender' : [],
+                           'block' : [],
+                           'trial' : [],
+                           'correct_key' : [],
+                           'reaction_time' : [],
+                           'target' : [],                    #zur Erfassung ob Zielreiz gezeigt wurde ja/nein
+                          })
+
+file_path = os.path.join(output_path, f' vp{"vp_id"}_find-human.csv')
 
 
 # stuff specific to our experiment
@@ -117,10 +101,25 @@ instruct_stim_2.setText("Zunächst starten wir mit einem kurzen Training. \n\n "
 "Viel Erfolg!")   
 instruct_stim_2.draw()
 win.flip() 
-event.waitKeys(maxWait=30.0, keyList=["space"])                                    
+event.waitKeys(maxWait=30.0, keyList=["space"])   
+
+_____________________________________________________________________bis hierher läuft es___________________________________________________________________________________________
 
 
+# Abbruchkriterium für Training
 
+# for-loop mit displays noch erstellen
+true_answers = 0
+response = event.waitKeys(maxWait = 60.0, keyList = ["a", "l"])                 # response musste definiert werden (geht es ohne maxWait -> wir wollen ja open trial)
+while true_answers < 5:
+    if response == ["a"] and "human" in display: #displays müssen noch definiert werden
+            true_answers += 1
+    elif response == ["l"] and "no human" in display:  
+            true_answers += 1
+    elif response == ["a"] and "no human" in display:
+            true_answers += 0
+    elif response == ["l"] and "human" in display:  
+            true_answers += 0 
 # Experiment-Funktion
 
 
