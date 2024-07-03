@@ -80,7 +80,7 @@ instruct_stim.setText("In diesem Experiment geht es darum ein Affengesicht zwisc
 "Auf diese Weise wollen wir untersuchen, wie gut zwischen Menschen- und Affengesichtern unterschieden werden kann. \n\n "\
 "Das Experimenten besteht aus x Blöcken mit y trials. \n\n" \
 "Ihre Aufgabe besteht darin, (1) in jedem Display das Affengesicht zu suchen und (2) zu entscheiden, ob das Display ein Affengesicht enthält. \n\n "\
-"Drücken Sie bitte die Taste (A) für  Affengesicht und (L) für Kein Affengesicht. \n\n" \ 
+"Drücken Sie bitte die Taste (A) für  Affengesicht und (L) für Kein Affengesicht. \n\n" \
 "Legen Sie nun bitte die Finger auf die entsprechenden Tasten. \n\n")
 win.flip()
 core.wait(5)
