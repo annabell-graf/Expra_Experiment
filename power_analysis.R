@@ -47,3 +47,10 @@ df_err = (dis_configuration - 1)*(n_epochs - 1)*(n - 1)
 (power_rmANOVA = wp.rmanova(ng = dis_configuration, nm = n_epochs, f = cohens_f, nscor = 1, alpha = 0.05, power = power, type = 2))   # wir suchen Interaktionseffekt
 
 
+# Output: Repeated-measures ANOVA analysis
+
+#           n   f ng nm nscor alpha power
+#    18.40711 0.8  3  2     1  0.05   0.8
+
+# NOTE: Power analysis for interaction-effect test
+# URL: http://psychstat.org/rmanova
