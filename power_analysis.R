@@ -1,3 +1,6 @@
+# Fragen an Betreuer: passt unser d & Typ 1 oder Typ 2 ANOVA
+
+
 #install.packages("pwr", lib = "D:/Programme/R-4.4.1/library")
 require("pwr")
 #install.packages('WebPower', lib = "D:/Programme/R-4.4.1/library")
