@@ -120,5 +120,74 @@ while true_answers < 5:
 # Experiment-Funktion
 
 
+
+#---------------------------------------------
+
+# Display
+
+# Seitenverhältnis Fenster
+aspect_ratio = win.size[0] / win.size[1]              # Anpassung: damit Bilder nicht in Breite gezogen werden
+scale_factor = min(win.size) / 768                    # Anpassung: Faktor, der Suchdisplay an unterschiedliche Bildschirmgrößen anpasst
+
+# Anpassungen für Stimuli
+rect_width = 0.15 * scale_factor                      # [auf meinem Bildschirm geeignete] Höhe wird an Bildschirmhöhe angepasst
+rect_height = 0.15 * aspect_ratio * scale_factor      # Breite des Bilds wird zusätzlich an Breite angepasst
+
+
+trials = 3
+
+# loop für Trials erstellen
+
+for n in range(trials):
+
+    # Erstellen einer Liste mit Positionen
+    pos_list = []
+
+                                                    
+    n_row   = 6
+    n_col   = 6
+    spacing =  .18                                 # Abstand zwischen Elementen
+    for i in range(n_row):
+        for j in range(n_col):
+            x_pos = (j - (n_col - 1) / 2) * spacing * scale_factor
+            y_pos = (i - (n_row - 1) / 2) * spacing * aspect_ratio * scale_factor
+            pos_list.append((x_pos, y_pos))
+
+
+    # Größe der Displays + zufällig generieren
+
+    display_size = [8, 16, 36]
+
+    size = random.choice(display_size)
+
+
+    
+
+    # Zeichnen der Rechtecke
+    
+    for i in range(size):
+        
+        # Ablenker zufällig auswählen
+        flanker = random.choice(img_human)         # Liste anpassen
+
+        pos = random.choice(pos_list)        
+        print(pos)
+        pos_list.remove(pos)
+        img_stim = visual.ImageStim(win, image = flanker, size=[rect_width, rect_height],
+                        pos = pos)                 # default rectangle plotten
+        img_stim.draw()
+    win.flip()
+
+    # zufällig auswählen ob target anwesend oder nicht
+    
+
+
+
+    # auf Antwort warten
+    response = event.waitKeys(maxWait = 10., keyList = ["space"])
+    print(response)
+    # wie zu lange Reaktionszeit implementieren
+win.close()
+
 # end experiment
 core.quit()
