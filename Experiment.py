@@ -125,6 +125,15 @@ while true_answers < 5:
 
 # Display
 
+
+# Ordner für Bilder definieren
+
+img_dir = os.path.join(os.getcwd(), "img_resized")     # Verzeichnis anpassen
+print(img_dir)
+img_all     = glob.glob(os.path.join(img_dir, "*.jpeg"))
+img_human   = glob.glob(os.path.join(img_dir, "human*"))
+#img_primate = glob.glob(os.path.join(img_dir, "primate*"))
+
 # Seitenverhältnis Fenster
 aspect_ratio = win.size[0] / win.size[1]              # Anpassung: damit Bilder nicht in Breite gezogen werden
 scale_factor = min(win.size) / 768                    # Anpassung: Faktor, der Suchdisplay an unterschiedliche Bildschirmgrößen anpasst
