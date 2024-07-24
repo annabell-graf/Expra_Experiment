@@ -118,80 +118,81 @@ while true_answers < 5:
 
 #---------------------------------------------
 
-# Seitenverhältnis Fenster
-aspect_ratio = win.size[0] / win.size[1]              # Anpassung: damit Bilder nicht in Breite gezogen werden
-scale_factor = min(win.size) / 768                    # Anpassung: Faktor, der Suchdisplay an unterschiedliche Bildschirmgrößen anpasst
+def show_display(blocks = 2, trials = 3):
+     # Seitenverhältnis Fenster
+    aspect_ratio = win.size[0] / win.size[1]              # Anpassung: damit Bilder nicht in Breite gezogen werden
+    scale_factor = min(win.size) / 768                    # Anpassung: Faktor, der Suchdisplay an unterschiedliche Bildschirmgrößen anpasst
 
-# Anpassungen für Stimuli
-rect_width = 0.15 * scale_factor                      # [auf meinem Bildschirm geeignete] Höhe wird an Bildschirmhöhe angepasst
-rect_height = 0.15 * aspect_ratio * scale_factor      # Breite des Bilds wird zusätzlich an Breite angepasst
-
-
-trials = 5     # Experiment= 45
-blocks = 2     # Experiment = 8
-
-# loop für Trials erstellen
-for m in range(blocks):
-    for n in range(trials):
-
-        # Erstellen einer Liste mit Positionen
-        pos_list = []
+    # Anpassungen für Stimuli
+    rect_width = 0.15 * scale_factor                      # [auf meinem Bildschirm geeignete] Höhe wird an Bildschirmhöhe angepasst
+    rect_height = 0.15 * aspect_ratio * scale_factor      # Breite des Bilds wird zusätzlich an Breite angepasst
 
 
-        n_row   = 6
-        n_col   = 6
-        spacing =  .18                                 # Abstand zwischen Elementen
-        for i in range(n_row):
-            for j in range(n_col):
-                x_pos = (j - (n_col - 1) / 2) * spacing * scale_factor
-                y_pos = (i - (n_row - 1) / 2) * spacing * aspect_ratio * scale_factor
-                pos_list.append((x_pos, y_pos))
+    #trials = 5     # Experiment= 45  (müssen wir mal gucken)
+    #blocks = 2     # Experiment = 8
+
+    # loop für Trials erstellen
+    for m in range(blocks):
+        for n in range(trials):
+
+            # Erstellen einer Liste mit Positionen
+            pos_list = []
 
 
-        # Größe der Displays + zufällig generieren
+            n_row   = 6
+            n_col   = 6
+            spacing =  .18                                 # Abstand zwischen Elementen
+            for i in range(n_row):
+                for j in range(n_col):
+                    x_pos = (j - (n_col - 1) / 2) * spacing * scale_factor
+                    y_pos = (i - (n_row - 1) / 2) * spacing * aspect_ratio * scale_factor
+                    pos_list.append((x_pos, y_pos))
 
-        display_size = [8, 16, 36]
 
-        size = random.choice(display_size)
+            # Größe der Displays + zufällig generieren
+
+            display_size = [8, 16, 36]
+
+            size = random.choice(display_size)
 
 
 
 
-        # Zeichnen der Rechtecke
+            # Zeichnen der Rechtecke
 
-        for i in range(size-1):
+            for i in range(size-1):
 
-            # Ablenker zufällig auswählen
-            flanker = random.choice(img_primate)                #Liste anpassen (alle Bilder brauchen .jpeg)
-            target_list = random.choice(["img_human", "img_primate"]) #im dict festhalten, aus welcher Liste Target
-            if target_list == "img_human":
-                target = random.choice(img_human)
-            elif target_list == "img_primate":
-                target = random.choice(img_primate)
-            print(target_list)
-            print(target)
+                # Ablenker zufällig auswählen
+                flanker = random.choice(img_primate)                #Liste anpassen (alle Bilder brauchen .jpeg)
+                target_list = random.choice(["img_human", "img_primate"]) #im dict festhalten, aus welcher Liste Target
+                if target_list == "img_human":
+                    target = random.choice(img_human)
+                elif target_list == "img_primate":
+                    target = random.choice(img_primate)
+                print(target_list)
+                print(target)
 
-            pos = random.choice(pos_list)
-            print(pos)
+                pos = random.choice(pos_list)
+                print(pos)
+                pos_list.remove(pos)
+                img_stim = visual.ImageStim(win, image = flanker, size=[rect_width, rect_height],
+                                pos = pos)                 #default rectangle plotten
+                img_stim.draw()
+
+            pos = random.choice(pos_list)                  #graue fenster als Platz für Traget, Target fehltnoch
             pos_list.remove(pos)
-            img_stim = visual.ImageStim(win, image = flanker, size=[rect_width, rect_height],
-                            pos = pos)                 #default rectangle plotten
+            img_stim = visual.ImageStim(win, image = target, size=[rect_width, rect_height],
+                                pos = pos)
             img_stim.draw()
+            win.flip()
 
-        pos = random.choice(pos_list)                  #graue fenster als Platz für Traget, Target fehltnoch
-        pos_list.remove(pos)
-        img_stim = visual.ImageStim(win, image = target, size=[rect_width, rect_height],
-                            pos = pos)
-        img_stim.draw()
-        win.flip()
-
-        # zufällig auswählen ob target anwesend oder nicht
+            # zufällig auswählen ob target anwesend oder nicht
 
 
 
 
-        # auf Antwort warten
-        response = event.waitKeys(keyList = ["a", "l"])
-        print(response)
+            # auf Antwort warten
+            response = event.waitKeys(keyList = ["a", "l"])
+            print(response)
 
 win.close()
