@@ -7,11 +7,11 @@ import time
 import pandas as pd
 
 # Bilder importieren
-img_dir = os.getcwd() + "images"                                                                # Arbeitsverzeichnis definieren!
 
-stim_list      = glob.glob(os.path.join(img_dir, "*.jpeg"))
-primate_img_list   = glob.glob(os.path.join(img_dir, "primate*"))
-human_img_list = glob.glob(os.path.join(img_dir, "human*"))
+img_dir     = os.path.join(os.getcwd(), "images")             # Verzeichnis anpassen
+img_all     = glob.glob(os.path.join(img_dir, "*.jpeg"))
+img_human   = glob.glob(os.path.join(img_dir, "human*"))
+img_primate = glob.glob(os.path.join(img_dir, "primate*"))
 
 
 # Anzahl von Trials und Blöcken
@@ -123,17 +123,6 @@ while true_answers < 5:
 
 #---------------------------------------------
 
-# Display
-
-
-# Ordner für Bilder definieren
-
-img_dir = os.path.join(os.getcwd(), "img_resized")     # Verzeichnis anpassen
-print(img_dir)
-img_all     = glob.glob(os.path.join(img_dir, "*.jpeg"))
-img_human   = glob.glob(os.path.join(img_dir, "human*"))
-#img_primate = glob.glob(os.path.join(img_dir, "primate*"))
-
 # Seitenverhältnis Fenster
 aspect_ratio = win.size[0] / win.size[1]              # Anpassung: damit Bilder nicht in Breite gezogen werden
 scale_factor = min(win.size) / 768                    # Anpassung: Faktor, der Suchdisplay an unterschiedliche Bildschirmgrößen anpasst
@@ -144,59 +133,65 @@ rect_height = 0.15 * aspect_ratio * scale_factor      # Breite des Bilds wird zu
 
 
 trials = 3
+blocks = 2
 
 # loop für Trials erstellen
 
-for n in range(trials):
+for m in range(blocks):
+    for n in range(trials):
 
-    # Erstellen einer Liste mit Positionen
-    pos_list = []
-
-                                                    
-    n_row   = 6
-    n_col   = 6
-    spacing =  .18                                 # Abstand zwischen Elementen
-    for i in range(n_row):
-        for j in range(n_col):
-            x_pos = (j - (n_col - 1) / 2) * spacing * scale_factor
-            y_pos = (i - (n_row - 1) / 2) * spacing * aspect_ratio * scale_factor
-            pos_list.append((x_pos, y_pos))
+        # Erstellen einer Liste mit Positionen
+        pos_list = []
 
 
-    # Größe der Displays + zufällig generieren
+        n_row   = 6
+        n_col   = 6
+        spacing =  .18                                 # Abstand zwischen Elementen
+        for i in range(n_row):
+            for j in range(n_col):
+                x_pos = (j - (n_col - 1) / 2) * spacing * scale_factor
+                y_pos = (i - (n_row - 1) / 2) * spacing * aspect_ratio * scale_factor
+                pos_list.append((x_pos, y_pos))
 
-    display_size = [8, 16, 36]
 
-    size = random.choice(display_size)
+        # Größe der Displays + zufällig generieren
+
+        display_size = [8, 16, 36]
+
+        size = random.choice(display_size)
 
 
-    
 
-    # Zeichnen der Rechtecke
-    
-    for i in range(size):
+
+        # Zeichnen der Rechtecke
+
+        for i in range(size-1):
+
+            # Ablenker zufällig auswählen
+            flanker = random.choice(img_primate)         # Liste anpassen
+
+            pos = random.choice(pos_list)
+            pos_list.remove(pos)
+            img_stim = visual.ImageStim(win, image = flanker, size=[rect_width, rect_height],
+                            pos = pos)                 # Bilder plotten plotten
+            img_stim.draw()
+                                              # Problem!
+
+        # zufällig auswählen ob target anwesend oder nicht
+        target_list = random.choice(["human", "primate"])    # im dict festhalten, aus welcher Liste Target
+        if target_list == "human":
+            target = random.choice(img_human)
+        elif target_list == "primate":
+            target = random.choice(img_primate)
         
-        # Ablenker zufällig auswählen
-        flanker = random.choice(img_human)         # Liste anpassen
-
-        pos = random.choice(pos_list)        
-        print(pos)
+        pos = random.choice(pos_list)                  #graue fenster als Platz für Target, Target fehltnoch
         pos_list.remove(pos)
-        img_stim = visual.ImageStim(win, image = flanker, size=[rect_width, rect_height],
-                        pos = pos)                 # default rectangle plotten
-        img_stim.draw()
-    win.flip()
-
-    # zufällig auswählen ob target anwesend oder nicht
-    
+        img_stim = visual.ImageStim(win, image = target, size=[rect_width, rect_height],
+                            pos = pos)
 
 
 
-    # auf Antwort warten
-    response = event.waitKeys(maxWait = 10., keyList = ["space"])
-    print(response)
-    # wie zu lange Reaktionszeit implementieren
+        # auf Antwort warten
+        response = event.waitKeys(maxWait = 10., keyList = ["a", "l"])
+    win.flip() 
 win.close()
-
-# end experiment
-core.quit()
