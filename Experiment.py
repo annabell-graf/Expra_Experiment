@@ -123,7 +123,7 @@ while true_answers < 5:
 
 #---------------------------------------------
 
-# Seitenverhältnis Fenster
+ Seitenverhältnis Fenster
 aspect_ratio = win.size[0] / win.size[1]              # Anpassung: damit Bilder nicht in Breite gezogen werden
 scale_factor = min(win.size) / 768                    # Anpassung: Faktor, der Suchdisplay an unterschiedliche Bildschirmgrößen anpasst
 
@@ -132,11 +132,10 @@ rect_width = 0.15 * scale_factor                      # [auf meinem Bildschirm g
 rect_height = 0.15 * aspect_ratio * scale_factor      # Breite des Bilds wird zusätzlich an Breite angepasst
 
 
-trials = 3
-blocks = 2
+trials = 5     # Experiment= 45
+blocks = 2     # Experiment = 8
 
 # loop für Trials erstellen
-
 for m in range(blocks):
     for n in range(trials):
 
@@ -168,30 +167,36 @@ for m in range(blocks):
         for i in range(size-1):
 
             # Ablenker zufällig auswählen
-            flanker = random.choice(img_primate)         # Liste anpassen
+            flanker = random.choice(img_primate)                #Liste anpassen (alle Bilder brauchen .jpeg)
+            target_list = random.choice(["img_human", "img_primate"]) #im dict festhalten, aus welcher Liste Target
+            if target_list == "img_human":
+                target = random.choice(img_human)
+            elif target_list == "img_primate":
+                target = random.choice(img_primate)
+            print(target_list)
+            print(target)
 
             pos = random.choice(pos_list)
+            print(pos)
             pos_list.remove(pos)
             img_stim = visual.ImageStim(win, image = flanker, size=[rect_width, rect_height],
-                            pos = pos)                 # Bilder plotten plotten
+                            pos = pos)                 #default rectangle plotten
             img_stim.draw()
-                                              # Problem!
 
-        # zufällig auswählen ob target anwesend oder nicht
-        target_list = random.choice(["human", "primate"])    # im dict festhalten, aus welcher Liste Target
-        if target_list == "human":
-            target = random.choice(img_human)
-        elif target_list == "primate":
-            target = random.choice(img_primate)
-        
-        pos = random.choice(pos_list)                  #graue fenster als Platz für Target, Target fehltnoch
+        pos = random.choice(pos_list)                  #graue fenster als Platz für Traget, Target fehltnoch
         pos_list.remove(pos)
         img_stim = visual.ImageStim(win, image = target, size=[rect_width, rect_height],
                             pos = pos)
+        img_stim.draw()
+        win.flip()
+
+        # zufällig auswählen ob target anwesend oder nicht
+
 
 
 
         # auf Antwort warten
-        response = event.waitKeys(maxWait = 10., keyList = ["a", "l"])
-    win.flip() 
+        response = event.waitKeys(keyList = ["a", "l"])
+        print(response)
+
 win.close()
