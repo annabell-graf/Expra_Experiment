@@ -68,11 +68,6 @@ win = visual.Window(
     fullscr = False)                        # kann bei Mac nun geschlossen an, mac = true
 
 
-# Anzahl der Stimuli randomisieren
-display_sizes = [9,18,36]
-random.choice(display_sizes)
-
-
 # Instruktionen definieren
 welcome_stim = visual.TextStim(win)
 welcome_stim.setText(
@@ -107,7 +102,7 @@ event.waitKeys(maxWait=30.0, keyList=["space"])
 
 # for-loop mit displays noch erstellen
 true_answers = 0
-response = event.waitKeys(maxWait = 60.0, keyList = ["a", "l"])                 # response musste definiert werden (geht es ohne maxWait -> wir wollen ja open trial)
+#response = event.waitKeys(maxWait = 60.0, keyList = ["a", "l"])                 # response musste definiert werden (geht es ohne maxWait -> wir wollen ja open trial)
 while true_answers < 5:
     if response == ["a"] and "human" in display: #displays müssen noch definiert werden
             true_answers += 1
@@ -123,7 +118,7 @@ while true_answers < 5:
 
 #---------------------------------------------
 
- Seitenverhältnis Fenster
+# Seitenverhältnis Fenster
 aspect_ratio = win.size[0] / win.size[1]              # Anpassung: damit Bilder nicht in Breite gezogen werden
 scale_factor = min(win.size) / 768                    # Anpassung: Faktor, der Suchdisplay an unterschiedliche Bildschirmgrößen anpasst
 
