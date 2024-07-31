@@ -102,8 +102,9 @@ event.waitKeys(maxWait=30.0, keyList=["space"])
 
 # for-loop mit displays noch erstellen
 true_answers = 0
-#response = event.waitKeys(maxWait = 60.0, keyList = ["a", "l"])                 # response musste definiert werden (geht es ohne maxWait -> wir wollen ja open trial)
+               
 while true_answers < 5:
+    response = event.waitKeys(keyList=["a", "l"]) # response musste definiert werden (geht es ohne maxWait -> wir wollen ja open trial)
     if response == ["a"] and "human" in display: #displays müssen noch definiert werden
             true_answers += 1
     elif response == ["l"] and "no human" in display:  
@@ -187,12 +188,30 @@ def show_display(blocks = 2, trials = 3):
             win.flip()
 
             # zufällig auswählen ob target anwesend oder nicht
-
-
-
+            
+           
+            # Startzeit messen
+            start_time = time.time()
 
             # auf Antwort warten
-            response = event.waitKeys(keyList = ["a", "l"])
-            print(response)
+            response = event.waitKeys(keyList=["a", "l"])
+
+            # Endzeit messen
+            if response:
+                end_time = time.time()
+                reaction_time = end_time - start_time  # Reaktionszeit berechnen
+
+            # Reaktionszeit speichern
+                reaction_times[f'block_{m}_trial_{n}'] = {
+                'response': response[0],
+                'reaction_time': reaction_time
+            }
+                print(f"Response: {response}, Reaction Time: {reaction_time:.4f} seconds") #4 Nachkommastellen
+
+# Experiment durchführen
+show_display()
+
+# Ergebnisse ausgeben
+print(reaction_times)
 
 win.close()
