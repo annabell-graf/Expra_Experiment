@@ -43,7 +43,7 @@ print(age, gender, vp_id)
 
 
 # Outputordner definieren
-output_path = os.getcwd() + f'vp{vp_id}'
+output_path = os.path.join(os.getcwd(), f'vp{vp_id}')
 if not os.path.exists(output_path):
     os.makedirs(output_path)
 
@@ -58,7 +58,7 @@ behav_data = pd.DataFrame({'vp_id' : [],
                            'target' : [],                    #zur Erfassung ob Zielreiz gezeigt wurde ja/nein
                           })
 
-file_path = os.path.join(output_path, f' vp{"vp_id"}_find-human.csv')
+file_path = os.path.join(output_path, f'vp{"vp_id"}_find-human.csv')
 
 
 # stuff specific to our experiment
@@ -104,7 +104,10 @@ event.waitKeys(maxWait=30.0, keyList=["space"])
 true_answers = 0
                
 while true_answers < 5:
-    response = event.waitKeys(keyList=["a", "l"]) # response musste definiert werden (geht es ohne maxWait -> wir wollen ja open trial)
+    # display muss definiert werden
+    # Beispiel: display = random.choice(["human", "no human"])
+    display = random.choice(["human", "no human"])
+    response = event.waitKeys(keyList=["a", "l"])# response musste definiert werden (geht es ohne maxWait -> wir wollen ja open trial)
     if response == ["a"] and "human" in display: #displays müssen noch definiert werden
             true_answers += 1
     elif response == ["l"] and "no human" in display:  
@@ -188,7 +191,9 @@ def show_display(blocks = 2, trials = 3):
             win.flip()
 
             # zufällig auswählen ob target anwesend oder nicht
+
             
+            reaction_times = {}
            
             # Startzeit messen
             start_time = time.time()
