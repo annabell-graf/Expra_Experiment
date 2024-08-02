@@ -37,9 +37,11 @@ print(age, gender, vp_id)
 
 
 # Outputordner definieren
-output_path = os.path.join(os.getcwd(), f'vp{vp_id}')
+output_path = os.path.join(os.getcwd(), f'vp_{vp_id}')
 if not os.path.exists(output_path):
     os.makedirs(output_path)
+
+file_path = os.path.join(output_path, f'vp_{vp_id}_find-human.csv')
 
 # dict für behav_Daten
 behav_data = {'vp_id' : [],
@@ -52,7 +54,7 @@ behav_data = {'vp_id' : [],
                 'target' : [],                    #zur Erfassung ob Zielreiz gezeigt wurde ja/nein
                           }
 
-file_path = os.path.join(output_path, f'vp{"vp_id"}_find-human.csv')
+file_path = os.path.join(output_path, f'vp{vp_id}_find-human.csv')
 
 
 # stuff specific to our experiment
@@ -258,6 +260,15 @@ win.flip()
 event.waitKeys(keyList = ["space"])
 show_display(blocks = 2, trials = 1, dict_for_data = behav_data)
 
-print(behav_data)
 
 win.close()
+
+
+for key in behav_data:
+    print(key, ":", behav_data[key])
+
+
+# Dataframe speichern
+
+df = pd.DataFrame.from_dict(behav_data)                       # dict in pandas Dataframe umwandeln
+df.to_csv(file_path, sep = ",", index=False, header=True)
