@@ -134,15 +134,15 @@ def show_display(blocks = 2, trials = 3, dict_for_data = None):
             iti.setText("")
             iti.draw()
             win.flip()
-            core.wait(.5)
+            event.waitKeys(maxWait = .5, keyList = None)
 
 
-            # Fixatioskreuz anzeigen
+            # Fixationskreuz anzeigen
             fix_cross = visual.TextStim(win, height = 0.3)         # Fixationskreuz erstellen
             fix_cross.setText("+")
             fix_cross.draw()
             win.flip()
-            core.wait(1.)
+            event.waitKeys(maxWait = 1., keyList = None)
             
             
             # Zeichnen der Bilder
@@ -238,7 +238,7 @@ text_stim.setText("Jetzt beginnt das Experiment  \n\n" \
 text_stim.draw()
 win.flip()
 event.waitKeys(keyList = ["space"])
-show_display(blocks = 2, trials = 1, dict_for_data = behav_data)
+show_display(blocks = 3, trials = 5, dict_for_data = behav_data)
 
 # Abschlussdisplay
 text_stim = visual.TextStim(win)
