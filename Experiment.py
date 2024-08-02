@@ -52,7 +52,7 @@ file_path = os.path.join(output_path, f'vp{vp_id}_find-human.csv')
 # Fenster erstellen
 win = visual.Window(
     color='grey',
-    size=[1366, 768],                      # Display anpassen, Jeanette: 2560 x 1664, Clara: 2560 × 1600
+    size=[1366, 768],                      # Display anpassen, mac = 2560, 1440
     fullscr = True                         # kann bei Mac nun geschlossen an, mac = true
     )                        
 
@@ -70,7 +70,7 @@ event.waitKeys(maxWait=30.0, keyList=["space"])
 instruct_stim = visual.TextStim(win) 
 instruct_stim.setText(
 "Das Experimenten besteht aus x Blöcken mit y trials. \n\n" \
-"Drücken Sie bitte die Taste (a) wenn ein Menschengesicht da ist und (l) wenn kein Menschengesicht da ist. \n\n" \
+"Drücken Sie bitte die Taste [A] wenn ein Menschengesicht da ist und [L] wenn kein Menschengesicht da ist. \n\n" \
 "Legen Sie nun bitte die Finger auf die entsprechenden Tasten. \n\n"\
 "Drücken Sie die Leertaste für [weiter].")
 instruct_stim.draw()
@@ -91,7 +91,7 @@ event.waitKeys(maxWait=30.0, keyList=["space"])
 def show_display(blocks = 2, trials = 3, dict_for_data = None):
      # Seitenverhältnis Fenster
     aspect_ratio = win.size[0] / win.size[1]              # Anpassung: damit Bilder nicht in Breite gezogen werden
-    scale_factor = min(win.size) / 768                    # Anpassung: Faktor, der Suchdisplay an unterschiedliche Bildschirmgrößen anpasst, Jeanette: 1664, Clara: 1600
+    scale_factor = min(win.size) / 768                    # Anpassung: Faktor, der Suchdisplay an unterschiedliche Bildschirmgrößen anpasst
 
     # Anpassungen für Stimuli
     rect_width = 0.19 * scale_factor                      # [auf meinem Bildschirm geeignete] Höhe wird an Bildschirmhöhe angepasst
@@ -104,7 +104,7 @@ def show_display(blocks = 2, trials = 3, dict_for_data = None):
     # loop für Trials erstellen
     for m in range(blocks):
         block_text = visual.TextStim(win, text = f"Block {m+1} \n\n" \
-                                     "Drücke [a] für Mensch und [l] für kein Mensch \n\n" \
+                                     "Drücke [A] für Mensch und [L] für kein Mensch \n\n" \
                                         "Drücke die Leertaste, um weiter zu machen")
         block_text.draw()
         win.flip()
@@ -225,7 +225,7 @@ while training_answer == "y":
     show_display(blocks=1, trials=5)   
     training_stim = visual.TextStim(win)
     training_stim.setText("Möchtest du das Training wiederholen? \n\n " \
-                      "Ja [y]      Nein [n]")
+                      "Ja [Y]      Nein [N]")
     training_stim.draw()
     win.flip()
     training_answer = event.waitKeys(keyList=["y", "n"])[0]
@@ -240,6 +240,13 @@ win.flip()
 event.waitKeys(keyList = ["space"])
 show_display(blocks = 2, trials = 1, dict_for_data = behav_data)
 
+# Abschlussdisplay
+text_stim = visual.TextStim(win)
+text_stim.setText("Das Experiment ist beendet \n\n  Vielen Dank für deine Teilnahme!")
+text_stim.draw()
+win.flip()
+event.waitKeys(keyList = ["space"])
+
 
 win.close()
 
@@ -249,5 +256,9 @@ for key in behav_data:
 
 
 # Dataframe speichern
-df = pd.DataFrame.from_dict(behav_data)                       # dict in pandas Dataframe umwandeln
-df.to_csv(file_path, sep = ",", index=False, header=True)
+try:
+    df = pd.DataFrame.from_dict(behav_data)                       # dict in pandas Dataframe umwandeln
+    df.to_csv(file_path, sep = ",", index=False, header=True)
+except:
+    print(f"Fehler beim Speichern der Datei {file_path}")
+
