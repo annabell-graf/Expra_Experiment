@@ -52,7 +52,7 @@ file_path = os.path.join(output_path, f'vp{vp_id}_find-human.csv')
 # Fenster erstellen
 win = visual.Window(
     color='grey',
-    size=[1366, 768],                      # Display anpassen, mac = 2560, 1440
+    size=[1366, 768],                      # Display anpassen, Jeanette: 2560 x 1664, Clara: 2560 × 1600
     fullscr = True                         # kann bei Mac nun geschlossen an, mac = true
     )                        
 
@@ -91,7 +91,7 @@ event.waitKeys(maxWait=30.0, keyList=["space"])
 def show_display(blocks = 2, trials = 3, dict_for_data = None):
      # Seitenverhältnis Fenster
     aspect_ratio = win.size[0] / win.size[1]              # Anpassung: damit Bilder nicht in Breite gezogen werden
-    scale_factor = min(win.size) / 768                    # Anpassung: Faktor, der Suchdisplay an unterschiedliche Bildschirmgrößen anpasst
+    scale_factor = min(win.size) / 768                    # Anpassung: Faktor, der Suchdisplay an unterschiedliche Bildschirmgrößen anpasst, Jeanette: 1664, Clara: 1600
 
     # Anpassungen für Stimuli
     rect_width = 0.19 * scale_factor                      # [auf meinem Bildschirm geeignete] Höhe wird an Bildschirmhöhe angepasst
