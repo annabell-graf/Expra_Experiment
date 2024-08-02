@@ -9,9 +9,9 @@ import pandas as pd
 # Bilder importieren
 
 img_dir     = os.path.join(os.getcwd(), "images")             # Verzeichnis anpassen
-img_all     = glob.glob(os.path.join(img_dir, "*.jpeg"))
-img_human   = glob.glob(os.path.join(img_dir, "human*"))
-img_primate = glob.glob(os.path.join(img_dir, "primate*"))
+img_all     = glob.glob(os.path.join(img_dir, "*.png"))
+img_human   = glob.glob(os.path.join(img_dir, "Mensch*"))
+img_primate = glob.glob(os.path.join(img_dir, "Affe*"))
 
 
 
@@ -37,22 +37,24 @@ print(age, gender, vp_id)
 
 
 # Outputordner definieren
-output_path = os.path.join(os.getcwd(), f'vp{vp_id}')
+output_path = os.path.join(os.getcwd(), f'vp_{vp_id}')
 if not os.path.exists(output_path):
     os.makedirs(output_path)
 
-# dict für behav_Daten
-behav_data = pd.DataFrame({'vp_id' : [],
-                           'age' : [],
-                           'gender' : [],
-                           'block' : [],
-                           'trial' : [],
-                           'correct_key' : [],
-                           'reaction_time' : [],
-                           'target' : [],                    #zur Erfassung ob Zielreiz gezeigt wurde ja/nein
-                          })
+file_path = os.path.join(output_path, f'vp_{vp_id}_find-human.csv')
 
-file_path = os.path.join(output_path, f'vp{"vp_id"}_find-human.csv')
+# dict für behav_Daten
+behav_data = {'vp_id' : [],
+                'age' : [],
+                'gender' : [],
+                'block' : [],
+                'trial' : [],
+                'correct_key' : [],
+                'reaction_time' : [],
+                'target' : [],                    #zur Erfassung ob Zielreiz gezeigt wurde ja/nein
+                          }
+
+file_path = os.path.join(output_path, f'vp{vp_id}_find-human.csv')
 
 
 # stuff specific to our experiment
@@ -90,13 +92,13 @@ win.flip()
 event.waitKeys(maxWait=30.0, keyList=["space"])   
 
 
-def show_display(blocks = 2, trials = 3):
+def show_display(blocks = 2, trials = 3, dict_for_data = None):
      # Seitenverhältnis Fenster
     aspect_ratio = win.size[0] / win.size[1]              # Anpassung: damit Bilder nicht in Breite gezogen werden
     scale_factor = min(win.size) / 768                    # Anpassung: Faktor, der Suchdisplay an unterschiedliche Bildschirmgrößen anpasst
 
     # Anpassungen für Stimuli
-    rect_width = 0.15 * scale_factor                      # [auf meinem Bildschirm geeignete] Höhe wird an Bildschirmhöhe angepasst
+    rect_width = 0.19 * scale_factor                      # [auf meinem Bildschirm geeignete] Höhe wird an Bildschirmhöhe angepasst
     rect_height = 0.15 * aspect_ratio * scale_factor      # Breite des Bilds wird zusätzlich an Breite angepasst
 
 
@@ -160,13 +162,12 @@ def show_display(blocks = 2, trials = 3):
 
                 # Ablenker zufällig auswählen
                 flanker = random.choice(img_primate)                #Liste anpassen (alle Bilder brauchen .jpeg)
-                target_list = random.choice(["img_human", "img_primate"]) #im dict festhalten, aus welcher Liste Target
-                if target_list == "img_human":
+                target_list = random.choice(["human", "primate"]) #im dict festhalten, aus welcher Liste Target
+                if target_list == "human":
                     target = random.choice(img_human)
-                elif target_list == "img_primate":
+                elif target_list == "primate":
                     target = random.choice(img_primate)
-                print(target_list)
-                print(target)
+                
 
                 pos = random.choice(pos_list)
                 print(pos)
@@ -184,8 +185,6 @@ def show_display(blocks = 2, trials = 3):
                                 pos = pos)
             img_stim.draw()
             win.flip()
-
-            # zufällig auswählen ob target anwesend oder nicht
 
             
             reaction_times = {}
@@ -208,7 +207,7 @@ def show_display(blocks = 2, trials = 3):
             # Endzeit messen
             if response:
                 end_time = time.time()
-                reaction_time = end_time - start_time  # Reaktionszeit berechnen
+                reaction_time = round(end_time - start_time, 4)  # Reaktionszeit berechnen
 
             # Reaktionszeit speichern
                 reaction_times[f'block_{m}_trial_{n}'] = {
@@ -216,6 +215,25 @@ def show_display(blocks = 2, trials = 3):
                 'reaction_time': reaction_time
             }
                 print(f"Response: {response}, Reaction Time: {reaction_time:.4f} seconds") #4 Nachkommastellen
+
+            # correct key ermitteln
+
+            correct_key = 1 if (response == ["a"] and target == "human") or (response == ["l"] and target == "primate") else 0
+
+            # Dictionary befüllen
+            
+
+            if dict_for_data:
+                dict_for_data["vp_id"].append(vp_id)
+                dict_for_data["age"].append(age)
+                dict_for_data["gender"].append(gender)
+                dict_for_data["block"].append(m+1)
+                dict_for_data["trial"].append(n+1)
+                dict_for_data["correct_key"].append(correct_key)
+                dict_for_data["reaction_time"].append(reaction_time)
+                dict_for_data["target"].append(target_list)
+
+
 
 # Training
 
@@ -240,7 +258,17 @@ text_stim.setText("Jetzt beginnt das Experiment  \n\n" \
 text_stim.draw()
 win.flip()
 event.waitKeys(keyList = ["space"])
-show_display(blocks = 2, trials = 1)
+show_display(blocks = 2, trials = 1, dict_for_data = behav_data)
 
 
 win.close()
+
+
+for key in behav_data:
+    print(key, ":", behav_data[key])
+
+
+# Dataframe speichern
+
+df = pd.DataFrame.from_dict(behav_data)                       # dict in pandas Dataframe umwandeln
+df.to_csv(file_path, sep = ",", index=False, header=True)
