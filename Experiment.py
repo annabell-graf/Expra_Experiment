@@ -9,9 +9,9 @@ import pandas as pd
 # Bilder importieren
 
 img_dir     = os.path.join(os.getcwd(), "images")             # Verzeichnis anpassen
-img_all     = glob.glob(os.path.join(img_dir, "*.jpeg"))
-img_human   = glob.glob(os.path.join(img_dir, "human*"))
-img_primate = glob.glob(os.path.join(img_dir, "primate*"))
+img_all     = glob.glob(os.path.join(img_dir, "*.png"))
+img_human   = glob.glob(os.path.join(img_dir, "Mensch*"))
+img_primate = glob.glob(os.path.join(img_dir, "Affe*"))
 
 
 
@@ -98,7 +98,7 @@ def show_display(blocks = 2, trials = 3, dict_for_data = None):
     scale_factor = min(win.size) / 768                    # Anpassung: Faktor, der Suchdisplay an unterschiedliche Bildschirmgrößen anpasst
 
     # Anpassungen für Stimuli
-    rect_width = 0.15 * scale_factor                      # [auf meinem Bildschirm geeignete] Höhe wird an Bildschirmhöhe angepasst
+    rect_width = 0.19 * scale_factor                      # [auf meinem Bildschirm geeignete] Höhe wird an Bildschirmhöhe angepasst
     rect_height = 0.15 * aspect_ratio * scale_factor      # Breite des Bilds wird zusätzlich an Breite angepasst
 
 
