@@ -14,13 +14,8 @@ img_human   = glob.glob(os.path.join(img_dir, "human*"))
 img_primate = glob.glob(os.path.join(img_dir, "primate*"))
 
 
-# Anzahl von Trials und Blöcken
 
-# ...
 
-# keyboard input
-trial_keys = ['a', 'l']
-continue_key = 'space'
 
 
 # Daten aufnehmen
@@ -31,8 +26,7 @@ vp_info = {
 }
 
 vp_data = gui.DlgFromDict(vp_info, title = "Probandendaten",                    # Titel der Dialogbox
-                          labels = ["Alter", "Geschlecht", "Probanden-ID"],     # Labels der Kästchen
-                          alwaysOnTop = True)                                   # Dialogbox anzeigen
+                          labels = ["Alter", "Geschlecht", "Probanden-ID"])                                   # Dialogbox anzeigen
 
 print(vp_info)                                                                  # Antworten werden automatisch in dict übernommen
 
@@ -65,7 +59,7 @@ file_path = os.path.join(output_path, f'vp{"vp_id"}_find-human.csv')
 win = visual.Window(
     color='grey',
     size=[1366, 768],                      # Display anpassen, mac = 2560, 1440
-    fullscr = False)                        # kann bei Mac nun geschlossen an, mac = true
+    fullscr = True)                        # kann bei Mac nun geschlossen an, mac = true
 
 
 # Instruktionen definieren
@@ -79,7 +73,7 @@ event.waitKeys(maxWait=30.0, keyList=["space"])
 instruct_stim = visual.TextStim(win) 
 instruct_stim.setText(
 "Das Experimenten besteht aus x Blöcken mit y trials. \n\n" \
-"Drücken Sie bitte die Taste (A) wenn ein Menschengesicht da ist und (L) wenn kein Menschengesicht da ist. \n\n" \
+"Drücken Sie bitte die Taste (a) wenn ein Menschengesicht da ist und (l) wenn kein Menschengesicht da ist. \n\n" \
 "Legen Sie nun bitte die Finger auf die entsprechenden Tasten. \n\n"\
 "Drücken Sie die Leertaste für [weiter].")
 instruct_stim.draw()
@@ -88,39 +82,13 @@ event.waitKeys(maxWait=30.0, keyList=["space"])
 
 instruct_stim_2 = visual.TextStim(win) 
 instruct_stim_2.setText("Zunächst starten wir mit einem kurzen Training. \n\n " \
-"Nach erfolgreichem Trainig startet das eigentliche Experiment. \n\n" \
+"Nach erfolgreichem Training startet das eigentliche Experiment. \n\n" \
 "Drücken Sie die Leertaste, um das Experiment zu starten \n\n" \
 "Viel Erfolg!")   
 instruct_stim_2.draw()
 win.flip() 
 event.waitKeys(maxWait=30.0, keyList=["space"])   
 
-#_____________________________________________________________________bis hierher läuft es___________________________________________________________________________________________
-
-
-# Abbruchkriterium für Training
-
-# for-loop mit displays noch erstellen
-true_answers = 0
-               
-while true_answers < 5:
-    # display muss definiert werden
-    # Beispiel: display = random.choice(["human", "no human"])
-    display = random.choice(["human", "no human"])
-    response = event.waitKeys(keyList=["a", "l"])# response musste definiert werden (geht es ohne maxWait -> wir wollen ja open trial)
-    if response == ["a"] and "human" in display: #displays müssen noch definiert werden
-            true_answers += 1
-    elif response == ["l"] and "no human" in display:  
-            true_answers += 1
-    elif response == ["a"] and "no human" in display:
-            true_answers += 0
-    elif response == ["l"] and "human" in display:  
-            true_answers += 0 
-# Experiment-Funktion
-
-
-
-#---------------------------------------------
 
 def show_display(blocks = 2, trials = 3):
      # Seitenverhältnis Fenster
@@ -137,6 +105,15 @@ def show_display(blocks = 2, trials = 3):
 
     # loop für Trials erstellen
     for m in range(blocks):
+        
+        
+
+        block_text = visual.TextStim(win, text = f"Block {m+1} \n\n" \
+                                     "Drücke [a] für Mensch und [l] für kein Mensch \n\n" \
+                                        "Drücke die Leertaste, um weiter zu machen")
+        block_text.draw()
+        win.flip()
+        event.waitKeys(keyList =["space"])
         for n in range(trials):
 
             # Erstellen einer Liste mit Positionen
@@ -160,7 +137,22 @@ def show_display(blocks = 2, trials = 3):
             size = random.choice(display_size)
 
 
+            # Inter Trial Intervall (ITI)
 
+            iti = visual.TextStim(win, height = 0.3)         
+            iti.setText("")
+            iti.draw()
+            win.flip()
+            core.wait(.5)
+
+            # Fixatioskreuz anzeigen
+            fix_cross = visual.TextStim(win, height = 0.3)         # Fixationskreuz erstellen
+            fix_cross.setText("+")
+            fix_cross.draw()
+            win.flip()
+            core.wait(1.)
+            
+            
 
             # Zeichnen der Rechtecke
 
@@ -183,6 +175,9 @@ def show_display(blocks = 2, trials = 3):
                                 pos = pos)                 #default rectangle plotten
                 img_stim.draw()
 
+            
+
+
             pos = random.choice(pos_list)                  #graue fenster als Platz für Traget, Target fehltnoch
             pos_list.remove(pos)
             img_stim = visual.ImageStim(win, image = target, size=[rect_width, rect_height],
@@ -198,8 +193,17 @@ def show_display(blocks = 2, trials = 3):
             # Startzeit messen
             start_time = time.time()
 
-            # auf Antwort warten
-            response = event.waitKeys(keyList=["a", "l"])
+            # auf Antwort warten und Experiment abbrechen
+            while True:
+                keys = event.getKeys(keyList=["a", "l", "space", "escape"])
+                if keys:
+                    if 'escape' in keys:
+                        win.close()
+                        core.quit()
+                    else:
+                        response = keys[0]
+                        break
+
 
             # Endzeit messen
             if response:
@@ -213,10 +217,30 @@ def show_display(blocks = 2, trials = 3):
             }
                 print(f"Response: {response}, Reaction Time: {reaction_time:.4f} seconds") #4 Nachkommastellen
 
-# Experiment durchführen
-show_display()
+# Training
 
-# Ergebnisse ausgeben
-print(reaction_times)
+training_answer = "y"
+
+while training_answer == "y":
+    show_display(blocks=1, trials=1)    # ändern: 5
+    training_stim = visual.TextStim(win)
+    training_stim.setText("Möchtest du das Training wiederholen? \n\n "
+                      "Ja [y]      Nein [n]")
+    training_stim.draw()
+    win.flip()
+    training_answer = event.waitKeys(keyList=["y", "n"])[0]
+    print(f"Training answer: {training_answer}")
+
+
+
+# Experiment durchführen
+text_stim = visual.TextStim(win)
+text_stim.setText("Jetzt beginnt das Experiment  \n\n" \
+                    "Drücke die Leertaste, um zu beginnen")
+text_stim.draw()
+win.flip()
+event.waitKeys(keyList = ["space"])
+show_display(blocks = 2, trials = 1)
+
 
 win.close()
