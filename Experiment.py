@@ -46,9 +46,6 @@ behav_data = {'vp_id' : [],
                 'target' : [],                    #zur Erfassung ob Zielreiz gezeigt wurde ja/nein
                           }
 
-file_path = os.path.join(output_path, f'vp{vp_id}_find-human.csv')
-
-
 # Fenster erstellen
 win = visual.Window(
     color='grey',
