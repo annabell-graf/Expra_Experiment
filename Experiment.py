@@ -22,9 +22,9 @@ vp_info = {
 }
 vp_data = gui.DlgFromDict(vp_info, title = "Probandendaten",                    # Titel der Dialogbox
                           labels = ["Alter", "Geschlecht", "Probanden-ID"])     # Dialogbox anzeigen
-age = vp_info["age"]
+age    = vp_info["age"]
 gender = vp_info["gender"]
-vp_id = vp_info["vp_id"]
+vp_id  = vp_info["vp_id"]
 
 
 # Outputordner definieren
@@ -44,7 +44,10 @@ behav_data = {'vp_id' : [],
                 'correct_key' : [],
                 'reaction_time' : [],
                 'target' : [],                    #zur Erfassung ob Zielreiz gezeigt wurde ja/nein
+                'key' : []
                           }
+
+
 
 # Fenster erstellen
 win = visual.Window(
@@ -66,7 +69,7 @@ event.waitKeys(maxWait=30.0, keyList=["space"])
 
 instruct_stim = visual.TextStim(win) 
 instruct_stim.setText(
-"Das Experimenten besteht aus x Blöcken mit y trials. \n\n" \                        # anpassen
+"Das Experimenten besteht aus x Blöcken mit y trials. \n\n" \
 "Drücken Sie bitte die Taste [A] wenn ein Menschengesicht da ist und [L] wenn kein Menschengesicht da ist. \n\n" \
 "Legen Sie nun bitte die Finger auf die entsprechenden Tasten. \n\n"\
 "Drücken Sie die Leertaste für [weiter].")
@@ -131,11 +134,11 @@ def show_display(blocks = 2, trials = 3, dict_for_data = None):
             iti.setText("")
             iti.draw()
             win.flip()
-            event.waitKeys(maxWait = .5, keyList = None)
+            event.waitKeys(maxWait = .5, keyList = None)             # Es soll kein Tastendruck aufgezeichnet werden
 
 
             # Fixationskreuz anzeigen
-            fix_cross = visual.TextStim(win, height = 0.3)         # Fixationskreuz erstellen
+            fix_cross = visual.TextStim(win, height = 0.3)         
             fix_cross.setText("+")
             fix_cross.draw()
             win.flip()
@@ -147,28 +150,26 @@ def show_display(blocks = 2, trials = 3, dict_for_data = None):
 
                 # Ablenker zufällig auswählen
                 flanker = random.choice(img_primate)                #Liste anpassen (alle Bilder brauchen .jpeg)
-                target_list = random.choice(["human", "primate"])   #im dict festhalten, aus welcher Liste Target
-                if target_list == "human":
-                    target = random.choice(img_human)
-                elif target_list == "primate":
-                    target = random.choice(img_primate)
-                
-
                 pos = random.choice(pos_list)
                 pos_list.remove(pos)
                 img_stim = visual.ImageStim(win, image = flanker, size=[rect_width, rect_height],
                                 pos = pos)                 
                 img_stim.draw()
 
-            
+            target_list = random.choice(["human", "primate"])   #im dict festhalten, aus welcher Liste Target
+            if target_list == "human":
+                target = random.choice(img_human)
+            elif target_list == "primate":
+                target = random.choice(img_primate)
             pos = random.choice(pos_list)                 
             pos_list.remove(pos)
             img_stim = visual.ImageStim(win, image = target, size=[rect_width, rect_height],
                                 pos = pos)
             img_stim.draw()
+
             win.flip()
 
-            reaction_times = {}
+            reaction_times = {}             # ?
            
 
             # Startzeit messen
@@ -201,8 +202,13 @@ def show_display(blocks = 2, trials = 3, dict_for_data = None):
 
 
             # correct key ermitteln
-            correct_key = 1 if (response == ["a"] and target == "human") or (response == ["l"] and target == "primate") else 0
-
+            # correct_key = 1 if (response == ["a"] and target == "human") or (response == ["l"] and target == "primate") else 0
+            if response[0] == "a" and target_list == "human":
+                correct_key = 1
+            elif response[0] == "l" and target_list == "primate":
+                correct_key = 1
+            else:
+                correct_key = 0
 
             # Dictionary befüllen
             if dict_for_data:
@@ -214,6 +220,9 @@ def show_display(blocks = 2, trials = 3, dict_for_data = None):
                 dict_for_data["correct_key"].append(correct_key)
                 dict_for_data["reaction_time"].append(reaction_time)
                 dict_for_data["target"].append(target_list)
+                dict_for_data["key"].append(response[0])
+
+                # Ende der Funktion
 
 
 # Training
@@ -237,6 +246,7 @@ win.flip()
 event.waitKeys(keyList = ["space"])
 show_display(blocks = 3, trials = 5, dict_for_data = behav_data)
 
+
 # Abschlussdisplay
 text_stim = visual.TextStim(win)
 text_stim.setText("Das Experiment ist beendet \n\n  Vielen Dank für deine Teilnahme!")
@@ -248,6 +258,7 @@ event.waitKeys(keyList = ["space"])
 win.close()
 
 
+# befülltes dict in Konsole ausgeben
 for key in behav_data:
     print(key, ":", behav_data[key])
 
@@ -258,4 +269,3 @@ try:
     df.to_csv(file_path, sep = ",", index=False, header=True)
 except:
     print(f"Fehler beim Speichern der Datei {file_path}")
-
