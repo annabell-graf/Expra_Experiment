@@ -92,7 +92,7 @@ win.flip()
 event.waitKeys(maxWait=30.0, keyList=["space"])   
 
 
-def show_display(blocks = 2, trials = 3, dict_for_data = None):
+def show_display(blocks = 8, trials = 45, dict_for_data = None):
      # Seitenverhältnis Fenster
     aspect_ratio = win.size[0] / win.size[1]              # Anpassung: damit Bilder nicht in Breite gezogen werden
     scale_factor = min(win.size) / 768                    # Anpassung: Faktor, der Suchdisplay an unterschiedliche Bildschirmgrößen anpasst
@@ -258,7 +258,7 @@ text_stim.setText("Jetzt beginnt das Experiment  \n\n" \
 text_stim.draw()
 win.flip()
 event.waitKeys(keyList = ["space"])
-show_display(blocks = 2, trials = 1, dict_for_data = behav_data)
+show_display(blocks = 8, trials = 45, dict_for_data = behav_data)
 
 
 win.close()
