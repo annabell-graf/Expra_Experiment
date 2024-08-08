@@ -69,7 +69,7 @@ event.waitKeys(maxWait=30.0, keyList=["space"])
 
 instruct_stim = visual.TextStim(win) 
 instruct_stim.setText(
-"Das Experimenten besteht aus x Blöcken mit y trials. \n\n" \
+"Das Experimenten besteht aus 8 Blöcken mit 45 trials. \n\n" \
 "Drücken Sie bitte die Taste [A] wenn ein Menschengesicht da ist und [L] wenn kein Menschengesicht da ist. \n\n" \
 "Legen Sie nun bitte die Finger auf die entsprechenden Tasten. \n\n"\
 "Drücken Sie die Leertaste für [weiter].")
