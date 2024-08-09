@@ -205,11 +205,11 @@ def show_display(blocks = 8, trials = 45, dict_for_data = None):
             # correct key ermitteln
             # correct_key = 1 if (response == ["a"] and target == "human") or (response == ["l"] and target == "primate") else 0
             if response[0] == "a" and target_list == "human":
-                correct_key = 1
+                correct_key = True
             elif response[0] == "l" and target_list == "primate":
-                correct_key = 1
+                correct_key = True
             else:
-                correct_key = 0
+                correct_key = False
 
             # Dictionary befüllen
             if dict_for_data:
