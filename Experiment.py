@@ -44,7 +44,8 @@ behav_data = {'vp_id' : [],
                 'correct_key' : [],
                 'reaction_time' : [],
                 'target' : [],                    #zur Erfassung ob Zielreiz gezeigt wurde ja/nein
-                'key' : []
+                'key' : [],
+                'size' : [] 
                           }
 
 
@@ -104,8 +105,8 @@ def show_display(blocks = 8, trials = 45, dict_for_data = None):
     # loop für Trials erstellen
     for m in range(blocks):
         block_text = visual.TextStim(win, text = f"Block {m+1} \n\n" \
-                                     "Drücke [A] für Mensch und [L] für kein Mensch \n\n" \
-                                        "Drücke die Leertaste, um weiter zu machen")
+                                     "Drücken Sie [A] für Mensch und [L] für kein Mensch \n\n" \
+                                        "Drücken Sie die Leertaste, um fortzufahren")
         block_text.draw()
         win.flip()
         event.waitKeys(keyList =["space"])
@@ -125,8 +126,8 @@ def show_display(blocks = 8, trials = 45, dict_for_data = None):
 
 
             # Größe der Displays + zufällig generieren
-            display_size = [8, 16, 36]
-            size = random.choice(display_size)
+            display_sizes = [8, 16, 36]
+            size = random.choice(display_sizes)
 
 
             # Inter Trial Intervall (ITI)
@@ -221,26 +222,43 @@ def show_display(blocks = 8, trials = 45, dict_for_data = None):
                 dict_for_data["reaction_time"].append(reaction_time)
                 dict_for_data["target"].append(target_list)
                 dict_for_data["key"].append(response[0])
+                dict_for_data["size"].append(size)
+
 
                 # Ende der Funktion
 
 
 # Training
-training_answer = "y"
-while training_answer == "y":
-    show_display(blocks=8, trials=45)   
-    training_stim = visual.TextStim(win)
-    training_stim.setText("Möchtest du das Training wiederholen? \n\n " \
-                      "Ja [Y]      Nein [N]")
-    training_stim.draw()
-    win.flip()
-    training_answer = event.waitKeys(keyList=["y", "n"])[0]
-
+training_dict = {'vp_id' : [],
+                'age' : [],
+                'gender' : [],
+                'block' : [],
+                'trial' : [],
+                'correct_key' : [],
+                'reaction_time' : [],
+                'target' : [],                    #zur Erfassung ob Zielreiz gezeigt wurde ja/nein
+                'key' : [],
+                'size' : [] 
+                          }
+training_answer = 0
+while training_answer <= 8:
+    training_answer = 0
+    show_display(blocks = 1, trials = 10, dict_for_data = training_dict)
+    for i in training_dict["correct_key"]:
+        if i == True:
+            training_answer = training_answer + 1
+    if training_answer <= 8:
+        text_stim = visual.TextStim(win)
+        text_stim.setText("Hier ist ein weiterer Übungsblock \n\n" \
+                    "Drücken Sie die Leertaste, um zu fortzufahren")
+        text_stim.draw()
+        win.flip()
+        event.waitKeys(keyList = ["space"])
 
 # Experiment durchführen
 text_stim = visual.TextStim(win)
 text_stim.setText("Jetzt beginnt das Experiment  \n\n" \
-                    "Drücke die Leertaste, um zu beginnen")
+                    "Drücken Sie die Leertaste, um zu beginnen")
 text_stim.draw()
 win.flip()
 event.waitKeys(keyList = ["space"])
@@ -249,7 +267,7 @@ show_display(blocks = 8, trials = 45, dict_for_data = behav_data)
 
 # Abschlussdisplay
 text_stim = visual.TextStim(win)
-text_stim.setText("Das Experiment ist beendet \n\n  Vielen Dank für deine Teilnahme!")
+text_stim.setText("Das Experiment ist beendet \n\n  Vielen Dank für Ihre Teilnahme!")
 text_stim.draw()
 win.flip()
 event.waitKeys(keyList = ["space"])
