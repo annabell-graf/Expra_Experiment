@@ -6,13 +6,11 @@ import glob
 import time
 import pandas as pd
 
-
 # Bilder importieren
 img_dir     = os.path.join(os.getcwd(), "images")             # Verzeichnis anpassen
 img_all     = glob.glob(os.path.join(img_dir, "*.png"))
 img_human   = glob.glob(os.path.join(img_dir, "Mensch*"))
 img_primate = glob.glob(os.path.join(img_dir, "Affe*"))
-
 
 # Daten aufnehmen
 vp_info = {
@@ -48,8 +46,6 @@ behav_data = {'vp_id' : [],
                 'size' : [] 
                           }
 
-
-
 # Fenster erstellen
 win = visual.Window(
     color='grey',
@@ -81,7 +77,7 @@ event.waitKeys(maxWait=30.0, keyList=["space"])
 instruct_stim_2 = visual.TextStim(win) 
 instruct_stim_2.setText("Zunächst starten wir mit einem kurzen Training. \n\n " \
 "Nach erfolgreichem Training startet das eigentliche Experiment. \n\n" \
-"Drücken Sie die Leertaste, um das Experiment zu starten \n\n" \
+"Drücken Sie die Leertaste, um das Experiment zu starten. \n\n" \
 "Viel Erfolg!")   
 instruct_stim_2.draw()
 win.flip() 
@@ -105,8 +101,8 @@ def show_display(blocks = 8, trials = 45, dict_for_data = None):
     # loop für Trials erstellen
     for m in range(blocks):
         block_text = visual.TextStim(win, text = f"Block {m+1} \n\n" \
-                                     "Drücken Sie [A] für Mensch und [L] für kein Mensch \n\n" \
-                                        "Drücken Sie die Leertaste, um fortzufahren")
+                                     "Drücken Sie [A] für Mensch und [L] für kein Mensch. \n\n" \
+                                        "Drücken Sie die Leertaste, um fortzufahren.")
         block_text.draw()
         win.flip()
         event.waitKeys(keyList =["space"])
@@ -188,7 +184,6 @@ def show_display(blocks = 8, trials = 45, dict_for_data = None):
                         response = keys[0]
                         break
 
-
             # Endzeit messen
             if response:
                 end_time = time.time()
@@ -227,7 +222,6 @@ def show_display(blocks = 8, trials = 45, dict_for_data = None):
 
                 # Ende der Funktion
 
-
 # Training
 training_dict = {'vp_id' : [],
                 'age' : [],
@@ -249,16 +243,16 @@ while training_answer <= 8:
             training_answer = training_answer + 1
     if training_answer <= 8:
         text_stim = visual.TextStim(win)
-        text_stim.setText("Hier ist ein weiterer Übungsblock \n\n" \
-                    "Drücken Sie die Leertaste, um zu fortzufahren")
+        text_stim.setText("Hier ist ein weiterer Übungsblock. \n\n" \
+                    "Drücken Sie die Leertaste, um fortzufahren.")
         text_stim.draw()
         win.flip()
         event.waitKeys(keyList = ["space"])
 
 # Experiment durchführen
 text_stim = visual.TextStim(win)
-text_stim.setText("Jetzt beginnt das Experiment  \n\n" \
-                    "Drücken Sie die Leertaste, um zu beginnen")
+text_stim.setText("Jetzt beginnt das Experiment.  \n\n" \
+                    "Drücken Sie die Leertaste, um zu beginnen.")
 text_stim.draw()
 win.flip()
 event.waitKeys(keyList = ["space"])
@@ -267,7 +261,7 @@ show_display(blocks = 8, trials = 45, dict_for_data = behav_data)
 
 # Abschlussdisplay
 text_stim = visual.TextStim(win)
-text_stim.setText("Das Experiment ist beendet \n\n  Vielen Dank für Ihre Teilnahme!")
+text_stim.setText("Das Experiment ist beendet. \n\n  Vielen Dank für Ihre Teilnahme!")
 text_stim.draw()
 win.flip()
 event.waitKeys(keyList = ["space"])
