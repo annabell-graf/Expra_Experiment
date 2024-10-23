@@ -85,6 +85,7 @@ event.waitKeys(maxWait=30.0, keyList=["space"])
 
 
 # Funktion für Experiment erstellen
+
 def show_display(blocks = 8, trials = 45, dict_for_data = None):
      # Seitenverhältnis Fenster
     aspect_ratio = win.size[0] / win.size[1]              # Anpassung: damit Bilder nicht in Breite gezogen werden
