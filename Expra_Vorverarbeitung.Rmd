@@ -1,0 +1,110 @@
+---
+title: "Expra_Vorverarbeitung"
+output: html_document
+date: "2024-11-05"
+---
+
+# Vorbereitung der Umgebung
+
+```{r setup, include=FALSE}
+library(tidyverse)
+```
+
+# Ersten Datensatz einlesen
+
+```{r load dataset}
+wd = getwd()
+fname = "vp_1_find-human.csv"
+fpath = file.path(wd, "data", fname)
+
+vp_1 = read.table(fpath, sep = ",", header = T)
+
+head(vp_1)
+
+```
+
+
+# Vorverarbeitung
+
+```{r factors erstellen}
+(mean = mean(vp_1$reaction_time))                # Mittelwerte berechnen
+(sd = sd(vp_1$reaction_time))                    # Standardabweichung berechnen
+
+vp_1_vorverarbeitet = vp_1 %>%
+  filter(reaction_time > 0.2) %>%                # zu kleine RT raus
+  filter(reaction_time < mean + 2*sd) %>%        # zu hohe RT raus    # ggf. auch minus 2*sd
+  mutate(correct_key = ifelse(correct_key == "True", 1, 0))  # konvertiert "True" zu 1 und "False" zu 0  # correct key als numeric
+
+head(vp_1_vorverarbeitet)
+#View(vp_1_vorverarbeitet)
+```
+
+
+# sanity checks
+
+```{r sanity checks}
+xtabs(~ target, vp_1)
+
+xtabs(~ size, vp_1)
+
+xtabs(~target+size, vp_1_vorverarbeitet)
+```
+
+# alle Datensätze einlesen
+
+```{r Datensätze einlesen}
+df_all = NULL
+
+
+for (i in 1:12){
+  wd =  "~/Dokumente/Expra/Expra_data_analysis"   #getwd()
+  currentFile = paste0("vp_", i, "_find-human.csv")
+  fname = currentFile
+  fpath = file.path(wd, "data", fname)
+  
+  df_current = read.table(fpath, header = T, sep = ",")
+  
+  
+  # Vorverarbeitung
+  
+  (mean_current = mean(df_current$reaction_time))
+  (sd_current = sd(df_current$reaction_time))
+
+  df_current = df_current %>%
+  filter(reaction_time > 0.2) %>%                # zu kleine RT raus
+  filter(reaction_time < mean_current + 2*sd_current) %>%        # zu hohe RT raus
+                                                 # ggf. auch minus 2*sd
+  mutate(correct_key = ifelse(correct_key == "True", 1, 0))  # konvertiert "True" zu 1 und "False" zu 0  # Error?
+  # correct key als numeric
+  
+  # als Gesamt-Dataframe speichern
+  
+  df_all = bind_rows(df_all, df_current)
+}
+
+
+View(df_all)
+```
+
+# sanity checks
+
+```{r sanity checks}
+xtabs(~ target, df_all)
+
+xtabs(~ size, df_all)
+
+xtabs(~target+size, df_all)
+
+xtabs(~vp_id, df_all)
+
+xtabs(~gender, df_all)
+```
+
+
+# Daten speichern
+
+```{r}
+df = df_all
+save(df, file = "df_Expra.RData")
+```
+
