@@ -12,36 +12,36 @@ img_all     = glob.glob(os.path.join(img_dir, "*.png"))
 img_human   = glob.glob(os.path.join(img_dir, "Mensch*"))
 img_primate = glob.glob(os.path.join(img_dir, "Affe*"))
 
-# Daten aufnehmen
-vp_info = {
-    "age"   : [],
-    "gender": ["---","m", "w", "d"],       
+# Daten aufnehmen mit Systemdialog
+vp_info = {                              # Dataframe für Daten, die aufgenommen werden sollen
+    "age"   : [],                        # durch leere Liste ist freie Eingabe möglich
+    "gender": ["---","m", "w", "d"],     # Auswahlmöglichkeiten
     "vp_id" : []
 }
 vp_data = gui.DlgFromDict(vp_info, title = "Probandendaten",                    # Titel der Dialogbox
-                          labels = ["Alter", "Geschlecht", "Probanden-ID"])     # Dialogbox anzeigen
-age    = vp_info["age"]
+                          labels = ["Alter", "Geschlecht", "Probanden-ID"])     # Dialogbox anzeigen und labels definieren
+age    = vp_info["age"]                                                         # Variablen für die aufgenommenen Daten definieren und aus dict nehmen
 gender = vp_info["gender"]
 vp_id  = vp_info["vp_id"]
 
 
 # Outputordner definieren
-output_path = os.path.join(os.getcwd(), f'vp_{vp_id}')
-if not os.path.exists(output_path):
+output_path = os.path.join(os.getcwd(), f'vp_{vp_id}')          # separat für VP wird Ordner definiert
+if not os.path.exists(output_path):                             # wenn Output-Ordner für VP nicht existiert, erstellen
     os.makedirs(output_path)
 
 file_path = os.path.join(output_path, f'vp_{vp_id}_find-human.csv')
 
 
 # dict für behav_Daten
-behav_data = {'vp_id' : [],
+behav_data = {'vp_id' : [],                    # für jede erfasste Variable eine leere Liste erstellen
                 'age' : [],
                 'gender' : [],
                 'block' : [],
                 'trial' : [],
                 'correct_key' : [],
                 'reaction_time' : [],
-                'target' : [],                    #zur Erfassung ob Zielreiz gezeigt wurde ja/nein
+                'target' : [],                 
                 'key' : [],
                 'size' : [] 
                           }
@@ -91,15 +91,12 @@ def show_display(blocks = 8, trials = 45, dict_for_data = None):
     scale_factor = min(win.size) / 768                    # Anpassung: Faktor, der Suchdisplay an unterschiedliche Bildschirmgrößen anpasst
 
     # Anpassungen für Stimuli
-    rect_width = 0.19 * scale_factor                      # [auf meinem Bildschirm geeignete] Höhe wird an Bildschirmhöhe angepasst
+    rect_width = 0.19 * scale_factor                      # [auf meinem Bildschirm geeignete] Höhe wird an Bildschirmhöhe angepasst (sollte so bleiben, damit Code korrekt funktioniert)
     rect_height = 0.15 * aspect_ratio * scale_factor      # Breite des Bilds wird zusätzlich an Breite angepasst
-
-
-    #trials = 5     # Experiment= 45  (müssen wir mal gucken)
-    #blocks = 2     # Experiment = 8
 
     # loop für Trials erstellen
     for m in range(blocks):
+        # zu Beginn jedes Blocks Instruktionen zeigen
         block_text = visual.TextStim(win, text = f"Block {m+1} \n\n" \
                                      "Drücken Sie [A] für Mensch und [L] für kein Mensch. \n\n" \
                                         "Drücken Sie die Leertaste, um fortzufahren.")
@@ -109,11 +106,12 @@ def show_display(blocks = 8, trials = 45, dict_for_data = None):
 
         for n in range(trials):
 
-            # Erstellen einer Liste mit Positionen
+            # Erstellen einer Liste mit Positionen auf dem Display
             pos_list = []
-            n_row   = 6
-            n_col   = 6
+            n_row   = 6                                    # Anzahl der Zeilen
+            n_col   = 6                                    # Anzahl der Spalten
             spacing =  .18                                 # Abstand zwischen Elementen
+            # Liste mit allen möglichen Kombinationen von Koordinaten auf dem Suchdisplay
             for i in range(n_row):
                 for j in range(n_col):
                     x_pos = (j - (n_col - 1) / 2) * spacing * scale_factor
@@ -121,7 +119,7 @@ def show_display(blocks = 8, trials = 45, dict_for_data = None):
                     pos_list.append((x_pos, y_pos))
 
 
-            # Größe der Displays + zufällig generieren
+            # Größe der Displays + zufällig aus Liste ziehen
             display_sizes = [8, 16, 36]
             size = random.choice(display_sizes)
 
@@ -146,14 +144,14 @@ def show_display(blocks = 8, trials = 45, dict_for_data = None):
             for i in range(size-1):
 
                 # Ablenker zufällig auswählen
-                flanker = random.choice(img_primate)                #Liste anpassen (alle Bilder brauchen .jpeg)
+                flanker = random.choice(img_primate)                
                 pos = random.choice(pos_list)
                 pos_list.remove(pos)
                 img_stim = visual.ImageStim(win, image = flanker, size=[rect_width, rect_height],
                                 pos = pos)                 
                 img_stim.draw()
-
-            target_list = random.choice(["human", "primate"])   #im dict festhalten, aus welcher Liste Target
+            # Zufällig auswählen, ob target primate angezeigt wird
+            target_list = random.choice(["human", "primate"])   
             if target_list == "human":
                 target = random.choice(img_human)
             elif target_list == "primate":
@@ -166,6 +164,7 @@ def show_display(blocks = 8, trials = 45, dict_for_data = None):
 
             win.flip()
 
+            
             reaction_times = {}             # ?
            
 
@@ -174,9 +173,11 @@ def show_display(blocks = 8, trials = 45, dict_for_data = None):
 
 
             # auf Antwort warten und Experiment abbrechen
+            
             while True:
-                keys = event.getKeys(keyList=["a", "l", "escape"])
+                keys = event.getKeys(keyList=["a", "l", "escape"])           # diese Tasten werden kontinuierlich während Suchdisplay "beobachtet"
                 if keys:
+                    # Abbruch ist möglich, wenn Suchdisplay gezeigt wird
                     if 'escape' in keys:
                         text_stim = visual.TextStim(win)
                         text_stim.setText("Wollen Sie das Experiment beenden?\n\nja [j]   nein [n]\n\n Bestätigen Sie Ihre Eingabe mit der Leertaste")
@@ -211,7 +212,6 @@ def show_display(blocks = 8, trials = 45, dict_for_data = None):
 
 
             # correct key ermitteln
-            # correct_key = 1 if (response == ["a"] and target == "human") or (response == ["l"] and target == "primate") else 0
             if response[0] == "a" and target_list == "human":
                 correct_key = True
             elif response[0] == "l" and target_list == "primate":
@@ -219,7 +219,7 @@ def show_display(blocks = 8, trials = 45, dict_for_data = None):
             else:
                 correct_key = False
 
-            # Dictionary befüllen
+            # Dictionary befüllen mit gemessenen Daten
             if dict_for_data:
                 dict_for_data["vp_id"].append(vp_id)
                 dict_for_data["age"].append(age)
@@ -236,19 +236,19 @@ def show_display(blocks = 8, trials = 45, dict_for_data = None):
                 # Ende der Funktion
 
 # Training
-training_dict = {'vp_id' : [],
+training_dict = {'vp_id' : [],                    # gesondertes dict erstellen für Trainingsdaten
                 'age' : [],
                 'gender' : [],
                 'block' : [],
                 'trial' : [],
                 'correct_key' : [],
                 'reaction_time' : [],
-                'target' : [],                    #zur Erfassung ob Zielreiz gezeigt wurde ja/nein
+                'target' : [],                    
                 'key' : [],
                 'size' : [] 
                           }
 training_answer = 0
-while training_answer <= 8:
+while training_answer <= 8:      # 8/10 trials sollen korrekt beantwortet werden
     training_answer = 0
     show_display(blocks = 1, trials = 10, dict_for_data = training_dict)
     for i in training_dict["correct_key"]:
